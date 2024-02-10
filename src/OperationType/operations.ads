@@ -1,5 +1,9 @@
 package operations is
 
+    type NullOp is (
+        NOP
+    );
+
     type BinaryOp is (
 
         GREATER_THAN,
@@ -7,6 +11,7 @@ package operations is
         LESS_THAN,
         LESS_EQUAL,
         EQUAL,
+        ASSIGN,
         DIFFERENT
     );
 
