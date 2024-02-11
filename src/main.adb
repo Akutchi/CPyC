@@ -1,21 +1,25 @@
-with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Text_IO;           use Ada.Text_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
-with objects; use objects;
-with operations; use operations;
-with Types.Prefix; use Types.Prefix;
-with Types.Naturals; use Types.Naturals;
+with Objects;           use Objects;
+with Objects.Structure; use Objects.Structure;
+with Objects.Statement; use Objects.Statement;
+with Operations;        use Operations;
+with Types.Prefix;      use Types.Prefix;
+with Types.Naturals;    use Types.Naturals;
 
 procedure main is
 
+    var : ObjectList := (New_Variable (VarName => "y"));
+
     obj : StructureObject'Class := New_Structure
                                     (Prefix => IF_PREFIX,
-                                     Stmt => New_Assignment
-                                                (Left => New_Variable (Name => "x"),
-                                                Right => New_Integer (Value => 10),
-                                                Op    => ASSIGN),
+                                     Stmt => New_Expression
+                                                (Left  => New_Variable (VarName => "x"),
+                                                 Right => New_Integer (Value => 10),
+                                                 Op    => ASSIGN),
 
-                                     Body_stmt => New_Variable (Name => "y"));
+                                     Body_stmt => var);
 begin
 
     Put_Line ("This is the main program");

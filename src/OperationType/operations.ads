@@ -1,4 +1,4 @@
-package operations is
+package Operations is
 
     type NullOp is (
         NOP
@@ -22,4 +22,4 @@ package operations is
     );
 
 
-end operations;
+end Operations;
