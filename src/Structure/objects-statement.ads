@@ -1,5 +1,3 @@
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-
 with Objects;       use Objects;
 with Operations;    use Operations;
 
@@ -26,7 +24,7 @@ package Objects.Statement is
 private
 
     type VariableObject is new VarObject with record
-        Name : Unbounded_String;
+        VarName : String (1 .. 255);
 
     end record;
 

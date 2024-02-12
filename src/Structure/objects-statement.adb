@@ -6,7 +6,7 @@ package body Objects.Statement is
     is
     begin
 
-        return VariableObject (VarName => To_Unbounded_String (VarName));
+        return VariableObject (VarName => VarName);
 
     end New_Variable;
 
@@ -17,9 +17,9 @@ package body Objects.Statement is
     is
     begin
 
-        return  ExpressionObject (Left => Left,
+        return  ExpressionObject (Left  => Left,
                                   Right => Right,
-                                  Op => Op);
+                                  Op    => Op);
 
     end New_Expression;
 
