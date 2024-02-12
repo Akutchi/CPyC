@@ -3,16 +3,35 @@ with Objects.Statement; use Objects.Statement;
 
 package body Objects.Structure is
 
-    function New_Structure (Prefix   : PrefixNames;
-                            Stmt     : VarObject'Class;
-                            BodyStmt : ObjectList)
-    return StructureObject
+    function Prefix     (SO : StructureObject) return PrefixNames
     is
     begin
+        return SO.Prefix;
+    end Prefix;
 
-        return StructureObject (Prefix => Prefix,
-                                Statement => Stmt,
-                                BodyStmt => BodyStmt);
+    function Stmt  (SO : StructureObject) return VarObject
+    is
+    begin
+        return SO.Stmt;
+    end Stmt;
+
+    function BodyStmt   (SO : StructureObject) return ObjectList.Vector
+    is
+    begin
+        return SO.BodyStmt;
+    end BodyStmt;
+
+    function New_Structure (StructPrefix  : PrefixNames;
+                            Statement     : VarObject;
+                            BodyStatement : ObjectList.Vector)
+    return StructureObject
+    is
+        New_Object : StructureObject := (Prefix      => StructPrefix,
+                                         Stmt        => Statement,
+                                         BodyStmt    => BodyStatement);
+    begin
+
+        return New_Object;
 
     end New_Structure;
 

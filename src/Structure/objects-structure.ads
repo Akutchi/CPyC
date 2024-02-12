@@ -8,12 +8,12 @@ package Objects.Structure is
     type StructureObject is tagged private;
 
     function Prefix     (SO : StructureObject) return PrefixNames;
-    function Statement  (SO : StructureObject) return VarObject'Class;
+    function Stmt       (SO : StructureObject) return VarObject;
     function BodyStmt   (SO : StructureObject) return ObjectList.Vector;
 
-    function New_Structure (Prefix    : PrefixNames;
-                            Stmt      : VarObject'Class;
-                            Body_Stmt : ObjectList.Vector)
+    function New_Structure (StructPrefix   : PrefixNames;
+                            Statement      : VarObject;
+                            BodyStatement  : ObjectList.Vector)
     return StructureObject;
 
 private
@@ -21,7 +21,7 @@ private
     type StructureObject is new RootObject with record
 
         Prefix    : PrefixNames;
-        Statement : VarObject;
+        Stmt      : VarObject;
         BodyStmt  : ObjectList.Vector;
 
     end record;

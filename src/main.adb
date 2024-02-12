@@ -11,23 +11,31 @@ with Types.Naturals;    use Types.Naturals;
 
 procedure main is
 
-    V : ObjectList.Vector;
-    obj : StructureObject;
+    LeftVar : VariableObject := New_Variable (VarName => "x");
+    RightValue : IntegerValue := New_Integer (Value => 10);
+
+    --  Stmt : ExpressionObject := New_Expression (
+    --                              Left   => LeftVar,
+    --                              Right  => RightValue,
+    --                              Op     => ASSIGN
+    --                          );
+
+    --  V : ObjectList.Vector;
+
+    --  obj : StructureObject := New_Structure (
+    --                              Prefix     => IF_PREFIX,
+    --                              Stmt       => Stmt,
+    --                              Body_stmt  => V
+    --                          );
+
 
 begin
 
-    V.Append (New_Variable (VarName => "y"));
-
-    obj := New_Structure (Prefix     => IF_PREFIX,
-                          Stmt       => New_Expression
-                                            (Left   => VarObject (New_Variable
-                                                            (VarName => "x")),
-                                             Right  => VarObject (New_Integer
-                                                            (Value => 10)),
-                                             Op     => ASSIGN),
-
-                          Body_stmt  => V);
+    -- V.Append (New_Variable (VarName => "y"));
 
     Put_Line ("This is the main program");
+    Put_Line ("Var name is " & LeftVar.VarName);
+    Put_Line ("Var value is " & Integer'Image (RightValue.Value));
+
 
 end main;
