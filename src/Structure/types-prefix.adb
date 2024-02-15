@@ -2,6 +2,10 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package body Types.Prefix is
 
+    ---------------
+    -- New_Gtype --
+    ---------------
+
     function New_GType (Pattern : NaturalType; T : GType)
     return GType
     is
@@ -35,6 +39,10 @@ package body Types.Prefix is
         return New_GType;
 
     end New_GType;
+
+    ---------------
+    -- Get_State --
+    ---------------
 
     function Get_State (Self : GType) return Boolean
     is

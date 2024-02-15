@@ -10,6 +10,10 @@ with Types.Prefix; use Types.Prefix;
 
 package body Parser is
 
+    ----------------
+    -- Split_Line --
+    ----------------
+
     function Split_Line (Row : String) return String_Array
     is
 
@@ -49,6 +53,21 @@ package body Parser is
 
     end Split_Line;
 
+    ----------------------------
+    -- Is_Undeclared_Variable --
+    ----------------------------
+
+    function Is_Undeclared_Variable (Is_Typped : Boolean ; Row : String)
+    return Boolean
+    is
+    begin
+        return Is_Typped and Row(Row'Last) = ';';
+    end;
+
+    ----------------
+    -- Parse_Line --
+    ----------------
+
     function Parse_Line (Row : String) return PrefixStructure
     is
         Splited_Line : String_Array := Split_Line (Row);
@@ -58,7 +77,7 @@ package body Parser is
 
     begin
 
-        if Is_Typped and Row(Row'Last) = ';' then
+        if Is_Undeclared_Variable (Is_Typped, Row) then
             return VAR_PREFIX;
         end if;
 

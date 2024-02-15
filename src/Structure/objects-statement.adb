@@ -28,6 +28,7 @@ package body Objects.Statement is
     end VarName;
 
 
+
     function Left   (AO : ExpressionObject'Class) return VarObject
     is
     begin
