@@ -4,16 +4,6 @@ with Objects.Statement; use Objects.Statement;
 
 package body Objects.Statement is
 
-    -------------
-    -- VarName --
-    -------------
-
-    function VarName  (VO : VariableObject) return String
-    is
-    begin
-        return To_String (VO.VarName);
-    end VarName;
-
     ------------------
     -- New_Variable --
     ------------------
@@ -26,6 +16,16 @@ package body Objects.Statement is
         return New_Var;
 
     end New_Variable;
+
+    -------------
+    -- VarName --
+    -------------
+
+    function VarName  (VO : VariableObject) return String
+    is
+    begin
+        return To_String (VO.VarName);
+    end VarName;
 
 
     function Left   (AO : ExpressionObject'Class) return VarObject

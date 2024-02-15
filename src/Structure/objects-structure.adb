@@ -3,7 +3,7 @@ with Objects.Statement; use Objects.Statement;
 
 package body Objects.Structure is
 
-    function Prefix     (SO : StructureObject) return PrefixNames
+    function Prefix     (SO : StructureObject) return PrefixStructure
     is
     begin
         return SO.Prefix;
@@ -21,7 +21,7 @@ package body Objects.Structure is
         return SO.BodyStmt;
     end BodyStmt;
 
-    function New_Structure (StructPrefix  : PrefixNames;
+    function New_Structure (StructPrefix  : PrefixStructure;
                             Statement     : VarObject;
                             BodyStatement : ObjectList.Vector)
     return StructureObject

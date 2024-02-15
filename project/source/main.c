@@ -1,1 +1,1 @@
-int i;
+char i;
