@@ -2,40 +2,37 @@ with Ada.Text_IO;           use Ada.Text_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with Objects;           use Objects;
-with Objects.ObjectList;use Objects.ObjectList;
-with Objects.Structure; use Objects.Structure;
 with Objects.Statement; use Objects.Statement;
 with Operations;        use Operations;
 with Types.Prefix;      use Types.Prefix;
 with Types.Naturals;    use Types.Naturals;
 
+with FileHandler;       use FileHandler;
+
 procedure main is
 
-    LeftVar : VariableObject := New_Variable (VarName => "x");
-    RightValue : IntegerValue := New_Integer (Value => 10);
+    -- to automatize
+    Source_File : File_Type;
+    Dest_File   : File_Type;
 
-    --  Stmt : ExpressionObject := New_Expression (
-    --                              Left   => LeftVar,
-    --                              Right  => RightValue,
-    --                              Op     => ASSIGN
-    --                          );
-
-    --  V : ObjectList.Vector;
-
-    --  obj : StructureObject := New_Structure (
-    --                              Prefix     => IF_PREFIX,
-    --                              Stmt       => Stmt,
-    --                              Body_stmt  => V
-    --                          );
+    Source_Name : constant String := "./project/source/main.c";
+    Dest_Name   : constant String := "./project/dest/main.py";
 
 
 begin
 
-    -- V.Append (New_Variable (VarName => "y"));
+    Open_File (Dest_File, Dest_Name);
+    Open (Source_File, In_File, Source_Name);
 
-    Put_Line ("This is the main program");
-    Put_Line ("Var name is " & LeftVar.VarName);
-    Put_Line ("Var value is " & Integer'Image (RightValue.Value));
+    while not End_Of_File (Source_File) loop
+
+        Put_Line (Get_Line (Source_File));
+
+    end loop;
+
+    Close (Source_File);
+    Close (Dest_File);
+
 
 
 end main;

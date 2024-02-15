@@ -14,9 +14,9 @@ package Objects.Statement is
 
     type ExpressionObject is tagged private;
 
-    function New_Expression (Left   : VarObject;
-                             Right  : VarObject;
-                             Op     : BinaryOp)
+    function New_Expression (LeftMember   : VarObject'Class;
+                             RightMember  : VarObject'Class;
+                             Operator     : BinaryOp)
     return ExpressionObject;
 
     function Left   (AO : ExpressionObject'Class) return VarObject;

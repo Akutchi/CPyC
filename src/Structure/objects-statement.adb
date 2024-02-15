@@ -4,11 +4,19 @@ with Objects.Statement; use Objects.Statement;
 
 package body Objects.Statement is
 
+    -------------
+    -- VarName --
+    -------------
+
     function VarName  (VO : VariableObject) return String
     is
     begin
         return To_String (VO.VarName);
     end VarName;
+
+    ------------------
+    -- New_Variable --
+    ------------------
 
     function New_Variable (VarName : String) return VariableObject
     is
@@ -18,6 +26,7 @@ package body Objects.Statement is
         return New_Var;
 
     end New_Variable;
+
 
     function Left   (AO : ExpressionObject'Class) return VarObject
     is
@@ -37,14 +46,14 @@ package body Objects.Statement is
         return AO.Op;
     end Op;
 
-    function New_Expression (Left   : VarObject;
-                             Right  : VarObject;
-                             Op     : BinaryOp)
+    function New_Expression (LeftMember   : VarObject'Class;
+                             RightMember  : VarObject'Class;
+                             Operator     : BinaryOp)
     return ExpressionObject
     is
-        New_Expr : ExpressionObject := (Left  => Left,
-                                        Right => Right,
-                                        Op    => Op);
+        New_Expr : ExpressionObject := (Left  => VarObject (LeftMember),
+                                        Right => VarObject (RightMember),
+                                        Op    => Operator);
     begin
 
         return  New_Expr;
