@@ -1,6 +1,5 @@
 with Ada.Text_IO;           use Ada.Text_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Tags; use Ada.Tags;
 
 with Objects;           use Objects;
 with Objects.Statement; use Objects.Statement;
@@ -27,16 +26,13 @@ begin
 
         declare
             Row : constant String := Get_Line (Source_Object);
-            Stmt : VariableObject := Parse_Variable (Row);
-
-            Var : IntAssignment'Class :=
-                        New_IntAssignment
-                            (Axiom        => INT,
-                            Left_Member   => New_Variable (Var_Name => Stmt.Var_Name),
-                            Right_Member  => New_IntegerValue (Value => 0));
+            Raw_Data : RowInformation := Parse_Line (Row);
+            Representation : IntAssignment'Class :=
+                                Generate_Int_Variable (Raw_Data);
         begin
 
-            Put_Line (Dest_Object, Var.Left.Var_Name & " =" & Integer'Image(Var.Right.Value));
+            Put_Line (Dest_Object, Representation.Left.Var_Name & " =" &
+                                    Integer'Image(Representation.Right.Value));
 
 
         end;
