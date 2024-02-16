@@ -15,6 +15,8 @@ package Types.Prefix is
 
     type NaturalType is (
         INT,
+        FLOAT,
+        DOUBLE,
         CHAR
     );
 

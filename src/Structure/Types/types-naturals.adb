@@ -14,13 +14,13 @@ package body Types.Naturals is
     -- New_Integer --
     -----------------
 
-    function New_Integer (Value : Integer) return IntegerValue
+    function New_IntegerValue (Value : Integer) return IntegerValue
     is
-        New_Int : IntegerValue := (Value => Value);
+        New_Type : IntegerValue := (Value => Value);
     begin
 
-        return New_Int;
+        return New_Type;
 
-    end New_Integer;
+    end New_IntegerValue;
 
 end Types.Naturals;

@@ -3,13 +3,13 @@ with Ada.Exceptions;    use Ada.Exceptions;
 
 package body FileHandler is
 
-    procedure Open_File (F : in out File_Type; Name : String)
+    procedure Open_File (F : in out File_Type; Name : String; Mode : File_Mode)
     is
     begin
 
         begin
 
-            Open (F, In_File, Name);
+            Open (F, Mode, Name);
 
         exception
             when E : Name_Error =>

@@ -4,9 +4,8 @@ with Ada.Strings.Maps;      use Ada.Strings.Maps;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO;           use Ada.Text_IO;
 
-with GNAT.Regpat; use GNAT.Regpat;
-
-with Types.Prefix; use Types.Prefix;
+with Objects.Statement; use Objects.Statement;
+with Types.Prefix;      use Types.Prefix;
 
 package body Parser is
 
@@ -64,25 +63,38 @@ package body Parser is
         return Is_Typped and Row(Row'Last) = ';';
     end;
 
+    function Cure_Variable (Variable : Unbounded_String) return String
+    is
+        L : Integer := Length (Variable);
+    begin
+
+        return To_String (Variable) (1 .. L-1);
+    end Cure_Variable;
+
     ----------------
     -- Parse_Line --
     ----------------
 
-    function Parse_Line (Row : String) return PrefixStructure
+    function Parse_Variable (Row : String) return VariableObject
     is
         Splited_Line : String_Array := Split_Line (Row);
 
         Is_Typped : Boolean :=
-            New_GType (CHAR, New_GType (INT, Splited_Line(1))).Get_State;
+            New_GType (CHAR, New_GType (INT, Splited_Line (1))).Get_State;
 
     begin
 
         if Is_Undeclared_Variable (Is_Typped, Row) then
-            return VAR_PREFIX;
+
+            declare
+                Currated_Var : String := Cure_Variable (Splited_Line (2));
+            begin
+                return New_Variable (Var_Name => Currated_Var);
+            end;
         end if;
 
-        return NULL_PREFIX;
+        return New_Variable (Var_Name => "");
 
-    end Parse_Line;
+    end Parse_Variable;
 
 end Parser;

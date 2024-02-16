@@ -1,6 +1,7 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
-with Types.Prefix; use Types.Prefix;
+with Types.Prefix;      use Types.Prefix;
+with Objects.Statement; use Objects.Statement;
 
 package Parser is
 
@@ -8,6 +9,6 @@ package Parser is
 
     function Split_Line (Row : String) return String_Array;
 
-    function Parse_Line (Row : String) return PrefixStructure;
+    function Parse_Variable (Row : String) return VariableObject;
 
 end Parser;
