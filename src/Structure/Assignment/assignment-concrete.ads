@@ -4,7 +4,7 @@ generic
 package Assignment.Concrete is
 
     type ConcreteAssignment is new AssignmentObject with private;
-    type ConcreteAssignment_Access is access all ConcreteAssignment;
+    type Any_ConcreteAssignment is access all ConcreteAssignment;
 
     overriding
     function Axiomatic_Type (CA : ConcreteAssignment) return NaturalType;
@@ -16,7 +16,7 @@ package Assignment.Concrete is
     function New_Assignment (Axiom          : NaturalType;
                              Left_Member    : VariableObject;
                              Right_Member   : T)
-    return ConcreteAssignment_Access;
+    return Any_ConcreteAssignment;
 
 private
 

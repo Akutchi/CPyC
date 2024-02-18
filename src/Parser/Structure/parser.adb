@@ -83,9 +83,13 @@ package body Parser is
     begin
 
         declare
-            Char_Rep : constant Character := To_String (Split_Row (3)) (1);
+            Second_Position : constant Character := To_String
+                                                        (Split_Row (2)) (1);
+            Third_Position  : constant Character := To_String
+                                                        (Split_Row (3)) (1);
+
         begin
-            return Is_Typped and Char_Rep = '=';
+            return (Is_Typped and Third_Position = '='); -- or Second_Position = '=';
         end;
 
     exception
@@ -132,13 +136,17 @@ package body Parser is
 
     end Parse_Line;
 
+    ---------------------------
+    -- Generate_Int_Variable --
+    ---------------------------
+
     function Generate_Int_Variable (Current_Row : RowInformation)
     return IntImplAssignment.Any_Assignment
     is
 
         Splited_Row : String_Array := Current_Row.Splited_Line;
 
-        Null_Var : IntAssignment.ConcreteAssignment_Access :=
+        Null_Var : IntAssignment.Any_ConcreteAssignment :=
                     IntAssignment.New_Assignment
                         (Axiom          => INT,
                          Left_Member    => New_Variable (Var_Name => ""),
@@ -153,7 +161,7 @@ package body Parser is
                     Currated_Var : String := Remove_Semi_Colon
                                                 (Splited_Row (2));
 
-                    New_Var : IntAssignment.ConcreteAssignment_Access :=
+                    New_Var : IntAssignment.Any_ConcreteAssignment :=
                                 IntAssignment.New_Assignment
                                     (Axiom          => INT,
                                      Left_Member    => New_Variable
@@ -175,7 +183,7 @@ package body Parser is
                                                     (Splited_Row
                                                         (Splited_Row'Last)));
 
-                    New_Var : IntAssignment.ConcreteAssignment_Access :=
+                    New_Var : IntAssignment.Any_ConcreteAssignment :=
                             IntAssignment.New_Assignment
                                 (Axiom          => INT,
                                     Left_Member    => New_Variable

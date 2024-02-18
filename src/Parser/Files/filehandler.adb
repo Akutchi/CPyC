@@ -3,6 +3,10 @@ with Ada.Exceptions;    use Ada.Exceptions;
 
 package body FileHandler is
 
+    ---------------
+    -- Open_File --
+    ---------------
+
     procedure Open_File (F : in out File_Type; Name : String; Mode : File_Mode)
     is
     begin

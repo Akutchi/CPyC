@@ -5,7 +5,7 @@ with Types.Prefix;      use Types.Prefix;
 
 package Objects.VarObject is
 
-    type VarObject is tagged null record;
+    type VarObject is tagged private;
 
     type VariableObject is tagged private;
 
@@ -24,6 +24,8 @@ package Objects.VarObject is
 
 
 private
+
+    type VarObject is new RootObject with null record;
 
     type VariableObject is new VarObject with record
         Var_Name : Unbounded_String;

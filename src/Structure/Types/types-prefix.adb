@@ -2,6 +2,10 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package body Types.Prefix is
 
+    ------------
+    -- Update --
+    ------------
+
     function Update (T : GType; implementation : String) return Boolean
     is
     begin
