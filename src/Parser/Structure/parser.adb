@@ -4,9 +4,8 @@ with Ada.Strings.Maps;      use Ada.Strings.Maps;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO;           use Ada.Text_IO;
 
-with Objects.Statement; use Objects.Statement;
+with Objects.VarObject; use Objects.VarObject;
 with Types.Prefix;      use Types.Prefix;
-with Types.Naturals;     use Types.Naturals;
 
 package body Parser is
 
@@ -60,12 +59,18 @@ package body Parser is
     function Is_Undeclared_Variable (Is_Typped : Boolean ; Split_Row : String_Array)
     return Boolean
     is
-        Last_EI  : Integer   := Split_Row'Last;
-        Last_EL  : Integer   := Length (Split_Row (Last_EI));
-        Last_EC  : Character := To_String (Split_Row (Last_EI)) (Last_EL-1);
-
     begin
-        return Is_Typped and Last_EC /= '{';
+
+        declare
+            Last_EI  : Integer   := Split_Row'Last;
+            Last_EL  : Integer   := Length (Split_Row (Last_EI));
+            Last_EC  : Character := To_String (Split_Row (Last_EI)) (Last_EL-1);
+        begin
+            return Is_Typped and Last_EC /= '{';
+        end;
+
+    exception
+        when Constraint_Error => return false;
     end;
 
     --------------------------
@@ -75,11 +80,16 @@ package body Parser is
     function Is_Declared_Variable (Is_Typped : Boolean ; Split_Row : String_Array)
     return Boolean
     is
-        Char_Rep : constant Character := To_String (Split_Row (3)) (1);
-
     begin
 
-        return Is_Typped and Char_Rep = '=';
+        declare
+            Char_Rep : constant Character := To_String (Split_Row (3)) (1);
+        begin
+            return Is_Typped and Char_Rep = '=';
+        end;
+
+    exception
+        when Constraint_Error => return false;
     end;
 
     -----------------------
@@ -110,8 +120,6 @@ package body Parser is
 
     begin
 
-        Put_Line (Row);
-
         if Is_Declared_Variable (Is_Typped, Splited_Line) then
             Current_Row.Prefix := VAR_ASSIGNED_PREFIX;
 
@@ -125,10 +133,16 @@ package body Parser is
     end Parse_Line;
 
     function Generate_Int_Variable (Current_Row : RowInformation)
-    return IntAssignment'Class
+    return IntImplAssignment.Any_Assignment
     is
 
         Splited_Row : String_Array := Current_Row.Splited_Line;
+
+        Null_Var : IntAssignment.ConcreteAssignment_Access :=
+                    IntAssignment.New_Assignment
+                        (Axiom          => INT,
+                         Left_Member    => New_Variable (Var_Name => ""),
+                         Right_Member   => New_IntegerValue (Value => 0));
     begin
 
         case Current_Row.Prefix is
@@ -138,14 +152,18 @@ package body Parser is
                 declare
                     Currated_Var : String := Remove_Semi_Colon
                                                 (Splited_Row (2));
+
+                    New_Var : IntAssignment.ConcreteAssignment_Access :=
+                                IntAssignment.New_Assignment
+                                    (Axiom          => INT,
+                                     Left_Member    => New_Variable
+                                                        (Var_Name =>
+                                                            Currated_Var),
+                                     Right_Member   => New_IntegerValue
+                                                        (Value => 0));
                 begin
 
-                return New_IntAssignment (Axiom => INT,
-                                            Left_Member => New_Variable
-                                                            (Var_Name =>
-                                                                Currated_Var),
-                                            Right_Member => New_IntegerValue
-                                                                (Value => 0));
+                return IntImplAssignment.Any_Assignment(New_Var);
                 end;
 
             when VAR_ASSIGNED_PREFIX =>
@@ -157,23 +175,20 @@ package body Parser is
                                                     (Splited_Row
                                                         (Splited_Row'Last)));
 
+                    New_Var : IntAssignment.ConcreteAssignment_Access :=
+                            IntAssignment.New_Assignment
+                                (Axiom          => INT,
+                                    Left_Member    => New_Variable
+                                                        (Var_Name => Name),
+                                    Right_Member   => New_IntegerValue
+                                                        (Value => Var_Value));
+
                 begin
 
-                return New_IntAssignment (Axiom => INT,
-                                            Left_Member => New_Variable
-                                                            (Var_Name => Name),
-                                            Right_Member => New_IntegerValue
-                                                                (Value =>
-                                                                    Var_Value));
+                    return IntImplAssignment.Any_Assignment(New_Var);
                 end;
 
-            when others =>
-
-                return New_IntAssignment (Axiom => INT,
-                                            Left_Member => New_Variable
-                                                            (Var_Name => ""),
-                                            Right_Member => New_IntegerValue
-                                                                (Value => 0));
+            when others => return IntImplAssignment.Any_Assignment (Null_Var);
         end case;
 
     end Generate_Int_Variable;

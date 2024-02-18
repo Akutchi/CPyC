@@ -1,9 +1,16 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
+with Objects.VarObject; use Objects.VarObject;
 with Types.Prefix;      use Types.Prefix;
-with Objects.Statement; use Objects.Statement;
+
+with Assignment;
+with Assignment.Concrete;
 
 package Parser is
+
+    package IntImplAssignment is new Assignment (T => IntegerValue);
+    package IntAssignment     is new IntImplAssignment.Concrete;
+
 
     type String_Array is array (Positive range <>) of Unbounded_String;
 
@@ -18,6 +25,6 @@ package Parser is
     function Parse_Line (Row : String) return RowInformation;
 
     function Generate_Int_Variable (Current_Row : RowInformation)
-    return IntAssignment'Class;
+    return IntImplAssignment.Any_Assignment;
 
 end Parser;

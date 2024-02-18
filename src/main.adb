@@ -1,14 +1,16 @@
 with Ada.Text_IO;           use Ada.Text_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
-with Objects;           use Objects;
-with Objects.Statement; use Objects.Statement;
-with Operations;        use Operations;
-with Types.Prefix;      use Types.Prefix;
-with Types.Naturals;    use Types.Naturals;
+with Objects;                       use Objects;
+with Objects.VarObject;             use Objects.VarObject;
+with Operations;                    use Operations;
+with Types.Prefix;                  use Types.Prefix;
 
 with FileHandler;       use FileHandler;
 with Parser;            use Parser;
+
+with Assignment;
+with Assignment.Concrete;
 
 procedure main is
 
@@ -27,8 +29,8 @@ begin
         declare
             Row : constant String := Get_Line (Source_Object);
             Raw_Data : RowInformation := Parse_Line (Row);
-            Representation : IntAssignment'Class :=
-                                Generate_Int_Variable (Raw_Data);
+            Representation : IntImplAssignment.Any_Assignment :=
+                Generate_Int_Variable (Raw_Data);
         begin
 
             Put_Line (Dest_Object, Representation.Left.Var_Name & " =" &
