@@ -3,9 +3,15 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 package Types.Prefix is
 
     type PrefixStructure is (
+
+        -- VAR_DECLARATION_PREFIX   <T> [Name];
+        -- VAR_ASSIGNED_PREFIX      <T> [Name] = {Value};
+        -- VAR_USAGE_PREFIX         [Name] = {Value};
+
         NULL_PREFIX,
-        VAR_PREFIX,
+        VAR_DECLARATION_PREFIX,
         VAR_ASSIGNED_PREFIX,
+        VAR_USAGE_PREFIX,
         IF_PREFIX,
         ELIF_PREFIX,
         ELSE_PREFIX,

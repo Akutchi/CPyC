@@ -1,3 +1,3 @@
-int i = 1;
-int j = 32;
-j = 0;
+int i = 0;
+int j;
+j = 6856;

@@ -56,7 +56,7 @@ package body Parser is
     -- Is_Undeclared_Variable --
     ----------------------------
 
-    function Is_Undeclared_Variable (Is_Typped : Boolean ; Split_Row : String_Array)
+    function Is_Not_Structure (Split_Row : String_Array)
     return Boolean
     is
     begin
@@ -66,19 +66,18 @@ package body Parser is
             Last_EL  : Integer   := Length (Split_Row (Last_EI));
             Last_EC  : Character := To_String (Split_Row (Last_EI)) (Last_EL-1);
         begin
-            return Is_Typped and Last_EC /= '{';
+            return Last_EC /= '{';
         end;
 
     exception
         when Constraint_Error => return false;
     end;
 
-    --------------------------
-    -- Is_Declared_Variable --
-    --------------------------
+    ---------------------
+    -- Has_Affectation --
+    ---------------------
 
-    function Is_Declared_Variable (Is_Typped : Boolean ; Split_Row : String_Array)
-    return Boolean
+    function Has_Affectation (Split_Row : String_Array) return Boolean
     is
     begin
 
@@ -87,26 +86,14 @@ package body Parser is
                                                         (Split_Row (2)) (1);
             Third_Position  : constant Character := To_String
                                                         (Split_Row (3)) (1);
-
         begin
-            return (Is_Typped and Third_Position = '='); -- or Second_Position = '=';
+            return Third_Position = '=' or Second_Position = '=';
         end;
 
-    exception
-        when Constraint_Error => return false;
-    end;
+        exception
+            when Constraint_Error => return false;
 
-    -----------------------
-    -- Remove_Semi_Colon --
-    -----------------------
-
-    function Remove_Semi_Colon (Variable : Unbounded_String) return String
-    is
-        L : Integer := Length (Variable);
-    begin
-
-        return To_String (Variable) (1 .. L-1);
-    end Remove_Semi_Colon;
+    end Has_Affectation;
 
     ----------------
     -- Parse_Line --
@@ -124,17 +111,36 @@ package body Parser is
 
     begin
 
-        if Is_Declared_Variable (Is_Typped, Splited_Line) then
-            Current_Row.Prefix := VAR_ASSIGNED_PREFIX;
+        if Is_Typped then
 
-        elsif Is_Undeclared_Variable (Is_Typped, Splited_Line) then
-            Current_Row.Prefix := VAR_PREFIX;
+            if Has_Affectation (Splited_Line)
+            and Is_Not_Structure (Splited_Line) then
 
+                Current_Row.Prefix := VAR_ASSIGNED_PREFIX;
+            else
+
+                Current_Row.Prefix := VAR_DECLARATION_PREFIX;
+            end if;
+
+        else
+                Current_Row.Prefix := VAR_USAGE_PREFIX;
         end if;
 
         return Current_Row;
 
     end Parse_Line;
+
+    -----------------------
+    -- Remove_Semi_Colon --
+    -----------------------
+
+    function Remove_Semi_Colon (Variable : Unbounded_String) return String
+    is
+        L : Integer := Length (Variable);
+    begin
+
+        return To_String (Variable) (1 .. L-1);
+    end Remove_Semi_Colon;
 
     ---------------------------
     -- Generate_Int_Variable --
@@ -155,7 +161,7 @@ package body Parser is
 
         case Current_Row.Prefix is
 
-            when VAR_PREFIX =>
+            when VAR_DECLARATION_PREFIX =>
 
                 declare
                     Currated_Var : String := Remove_Semi_Colon
@@ -174,10 +180,15 @@ package body Parser is
                 return IntImplAssignment.Any_Assignment(New_Var);
                 end;
 
-            when VAR_ASSIGNED_PREFIX =>
+            when VAR_ASSIGNED_PREFIX | VAR_USAGE_PREFIX =>
 
                 declare
-                    Name      : String  := To_String (Splited_Row (2));
+                    Name_Position : Integer := (if Current_Row.Prefix =
+                                                VAR_ASSIGNED_PREFIX then 2
+                                                else 1);
+
+                    Name      : String  := To_String (Splited_Row
+                                                        (Name_Position));
                     Var_Value : Integer := Integer'Value
                                                 (Remove_Semi_Colon
                                                     (Splited_Row
