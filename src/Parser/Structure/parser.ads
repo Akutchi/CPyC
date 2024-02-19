@@ -17,7 +17,7 @@ package Parser is
     type RowInformation (Length : Integer) is record
 
         Splited_Line : String_Array (1 .. Length);
-        Prefix : PrefixStructure;
+        Prefix : StructurePrefix;
     end record;
 
     function Split_Line (Row : String) return String_Array;

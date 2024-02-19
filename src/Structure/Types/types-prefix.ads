@@ -2,7 +2,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package Types.Prefix is
 
-    type PrefixStructure is (
+    type StructurePrefix is (
 
         -- VAR_DECLARATION_PREFIX   <T> [Name];
         -- VAR_ASSIGNED_PREFIX      <T> [Name] = {Value};
@@ -19,7 +19,15 @@ package Types.Prefix is
         WHILE_PREFIX
     );
 
+    type ExpressionPrefix is (
+
+        VARIABLE_FORM,
+        VALUE_FORM,
+        EXPRESSION_FORM
+    );
+
     type NaturalType is (
+
         INT,
         FLOAT,
         DOUBLE,

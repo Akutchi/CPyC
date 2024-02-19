@@ -1,4 +1,5 @@
 with Objects.VarObject; use Objects.VarObject;
+with Operations;        use Operations;
 
 generic
 package Assignment.Concrete is
@@ -11,11 +12,11 @@ package Assignment.Concrete is
     overriding
     function Left           (CA : ConcreteAssignment) return VariableObject'Class;
     overriding
-    function Right          (CA : ConcreteAssignment) return T;
+    function Right          (CA : ConcreteAssignment) return Any_Expression;
 
     function New_Assignment (Axiom          : NaturalType;
                              Left_Member    : VariableObject;
-                             Right_Member   : T)
+                             Right_Member   : Any_Expression)
     return Any_ConcreteAssignment;
 
 private
@@ -23,7 +24,7 @@ private
     type ConcreteAssignment is new AssignmentObject with record
         Axiomatic_Type : NaturalType;
         Left           : VariableObject;
-        Right          : T;
+        Right          : Any_Expression;
 
     end record;
 

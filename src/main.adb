@@ -34,7 +34,7 @@ begin
         begin
 
             Put_Line (Dest_Object, Representation.Left.Var_Name & " =" &
-                                    Integer'Image(Representation.Right.Value));
+                                    Integer'Image(Representation.Right.ValueRep.Value));
 
 
         end;

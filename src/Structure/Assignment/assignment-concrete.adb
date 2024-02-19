@@ -26,7 +26,7 @@ package body Assignment.Concrete is
     -- Right --
     -----------
 
-    function Right (CA : ConcreteAssignment) return T
+    function Right (CA : ConcreteAssignment) return Any_Expression
     is
     begin
         return CA.Right;
@@ -38,7 +38,7 @@ package body Assignment.Concrete is
 
     function New_Assignment (Axiom          : NaturalType;
                              Left_Member    : VariableObject;
-                             Right_Member   : T)
+                             Right_Member   : Any_Expression)
     return Any_ConcreteAssignment
     is
         CA : Any_ConcreteAssignment := new ConcreteAssignment;

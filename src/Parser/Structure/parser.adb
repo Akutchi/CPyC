@@ -152,13 +152,17 @@ package body Parser is
 
         Splited_Row : String_Array := Current_Row.Splited_Line;
 
+        Var_Expr : IntImplAssignment.Any_Expression :=
+            new IntImplAssignment.Expression (VALUE_FORM);
+
         Null_Var : IntAssignment.Any_ConcreteAssignment :=
                     IntAssignment.New_Assignment
                         (Axiom          => INT,
                          Left_Member    => New_Variable (Var_Name => ""),
-                         Right_Member   => New_IntegerValue (Value => 0));
+                         Right_Member   => Var_Expr);
     begin
 
+        Var_Expr.ValueRep := New_IntegerValue (Value => 0);
         case Current_Row.Prefix is
 
             when VAR_DECLARATION_PREFIX =>
@@ -173,11 +177,10 @@ package body Parser is
                                      Left_Member    => New_Variable
                                                         (Var_Name =>
                                                             Currated_Var),
-                                     Right_Member   => New_IntegerValue
-                                                        (Value => 0));
+                                     Right_Member   => Var_Expr);
                 begin
 
-                return IntImplAssignment.Any_Assignment(New_Var);
+                    return IntImplAssignment.Any_Assignment(New_Var);
                 end;
 
             when VAR_ASSIGNED_PREFIX | VAR_USAGE_PREFIX =>
@@ -199,10 +202,11 @@ package body Parser is
                                 (Axiom          => INT,
                                     Left_Member    => New_Variable
                                                         (Var_Name => Name),
-                                    Right_Member   => New_IntegerValue
-                                                        (Value => Var_Value));
+                                    Right_Member   => Var_Expr);
 
                 begin
+
+                    Var_Expr.ValueRep := New_IntegerValue (Value => Var_Value);
 
                     return IntImplAssignment.Any_Assignment(New_Var);
                 end;
