@@ -17,7 +17,13 @@ package Parser is
     type RowInformation (Length : Integer) is record
 
         Splited_Line : String_Array (1 .. Length);
-        Prefix : StructurePrefix;
+        Prefix       : StructurePrefix;
+    end record;
+
+    type SubExpression_Information is record
+
+        Str     : Unbounded_String;
+        End_Pos : Integer;
     end record;
 
     function Split_Line (Row : String) return String_Array;
