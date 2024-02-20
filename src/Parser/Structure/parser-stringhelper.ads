@@ -1,3 +1,5 @@
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+
 package Parser.StringHelper is
 
     function Remove_Semi_Colon (Variable : Unbounded_String) return String;

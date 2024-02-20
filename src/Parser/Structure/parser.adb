@@ -1,11 +1,8 @@
 with Ada.Strings;           use Ada.Strings;
 with Ada.Strings.Fixed;     use Ada.Strings.Fixed;
 with Ada.Strings.Maps;      use Ada.Strings.Maps;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO;           use Ada.Text_IO;
 
-with Objects.VarObject; use Objects.VarObject;
-with Types.Prefix;      use Types.Prefix;
 with Operations;        use Operations;
 
 with Parser.BooleanHelper;  use Parser.BooleanHelper;
@@ -125,7 +122,8 @@ package body Parser is
     return IntImplAssignment.Any_Assignment
     is
         Var_Expr : IntImplAssignment.Any_Expression :=
-            new IntImplAssignment.Expression (EXPRESSION_FORM);
+            Parse_Int_Expression
+                (Remove_Semi_Colon (To_Unbounded_String (Row)));
 
         New_Assign : IntAssignment.Any_ConcreteAssignment :=
             IntAssignment.New_Assignment
@@ -134,9 +132,6 @@ package body Parser is
                  Right_Member => Var_Expr);
 
     begin
-        Var_Expr :=
-            Parse_Int_Expression
-                (Remove_Semi_Colon (To_Unbounded_String (Row)));
 
         return IntImplAssignment.Any_Assignment (New_Assign);
 

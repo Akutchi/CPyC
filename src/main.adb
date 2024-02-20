@@ -8,6 +8,7 @@ with Types.Prefix;                  use Types.Prefix;
 
 with FileHandler;       use FileHandler;
 with Parser;            use Parser;
+with Printer;           use Printer;
 
 with Assignment;
 with Assignment.Concrete;
@@ -33,8 +34,7 @@ begin
                 Generate_Int_Variable (Raw_Data);
         begin
 
-            Put_Line ("done");
-
+            Print (Dest_Object, Representation);
         end;
 
     end loop;

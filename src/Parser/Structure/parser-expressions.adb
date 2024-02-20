@@ -97,8 +97,6 @@ package body Parser.Expressions is
 
     begin
 
-        Put_Line (SubRow);
-
         if Is_Numeric (SubRow) then
             Var_Expr := new IntImplAssignment.Expression (VALUE_FORM);
             Var_Expr.ValueRep := New_IntegerValue (Value => Integer'Value (SubRow));
