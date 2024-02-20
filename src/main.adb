@@ -33,9 +33,7 @@ begin
                 Generate_Int_Variable (Raw_Data);
         begin
 
-            Put_Line (Dest_Object, Representation.Left.Var_Name & " =" &
-                                    Integer'Image(Representation.Right.ValueRep.Value));
-
+            Put_Line ("done");
 
         end;
 

@@ -26,11 +26,23 @@ package Parser is
         End_Pos : Integer;
     end record;
 
-    function Split_Line (Row : String) return String_Array;
-
     function Parse_Line (Row : String) return RowInformation;
 
     function Generate_Int_Variable (Current_Row : RowInformation)
+    return IntImplAssignment.Any_Assignment;
+
+private
+
+    function Split_Line (Row : String) return String_Array;
+
+    function Create_Assigned_Variable
+    (Current_Case : StructurePrefix; Splited_Row : String_Array)
+    return IntImplAssignment.Any_Assignment;
+
+    function Create_Variable (Splited_Row : String_Array)
+    return IntImplAssignment.Any_Assignment;
+
+    function Create_Int_Expression (Var_Name : String; Row : String)
     return IntImplAssignment.Any_Assignment;
 
 end Parser;

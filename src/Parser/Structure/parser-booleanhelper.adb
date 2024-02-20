@@ -92,4 +92,42 @@ package body Parser.BooleanHelper is
 
     end Is_Expression;
 
+    function Is_Expression (Row : Unbounded_String)
+    return Boolean
+    is
+
+        Parenthesis : constant String := "(";
+        Plus_Op     : constant String := "+";
+        Minus_Op    : constant String := "-";
+        Mult_Op     : constant String := "*";
+        Div_Op      : constant String := "/";
+
+    begin
+
+        return Has_Pattern (Row, Parenthesis) or
+               Has_Pattern (Row, Plus_Op) or
+               Has_Pattern (Row, Minus_Op) or
+               Has_Pattern (Row, Mult_Op) or
+               Has_Pattern (Row, Div_Op);
+
+    end Is_Expression;
+
+    function Is_Variable (Row : String) return Boolean
+    is
+    begin
+        return not Is_Expression (To_Unbounded_String (Row));
+    end Is_Variable;
+
+    function Is_Numeric (Row : String) return Boolean
+    is
+        Placeholder : Integer;
+    begin
+        Placeholder := Integer'Value (Row);
+        return True;
+
+    exception
+        when others => return False;
+
+    end Is_Numeric;
+
 end Parser.BooleanHelper;
