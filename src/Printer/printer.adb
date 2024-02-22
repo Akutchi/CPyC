@@ -1,7 +1,13 @@
 with Ada.strings.Fixed; use Ada.strings.Fixed;
 with Ada.strings.Maps; use Ada.strings.Maps;
 
+with Exceptions; use Exceptions;
+
 package body Printer is
+
+    -----------------------------
+    -- Decide_Inverse_Operator --
+    -----------------------------
 
     function Decide_Inverse_Operator (Op : BinaryOp) return String
     is
@@ -17,6 +23,10 @@ package body Printer is
         end case;
 
     end Decide_Inverse_Operator;
+
+    -----------
+    -- Print --
+    -----------
 
     procedure Print (F : File_Type; Exp : IntImplAssignment.Any_Assignment)
     is
@@ -57,6 +67,18 @@ package body Printer is
 
     end Print;
 
+    procedure Print (F : File_Type; Object : Any_Object)
+    is
+    begin
 
+        case Object.Form is
+
+            when ASSIGNMENT_PREFIX => Print (F, Object.Assign);
+
+            when others => raise ImplementationError with "structure printing";
+
+        end case;
+
+    end Print;
 
 end Printer;

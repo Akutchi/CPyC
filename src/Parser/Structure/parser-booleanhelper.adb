@@ -54,8 +54,8 @@ package body Parser.BooleanHelper is
     return Boolean
     is
 
-        Count_Pattern : Natural := Count (Source  => To_String (Row),
-                                          Pattern => Pattern);
+        Count_Pattern : Natural := Ada.Strings.Fixed.Count
+            (Source  => To_String (Row), Pattern => Pattern);
     begin
 
         return Count_Pattern > 0;
@@ -112,11 +112,19 @@ package body Parser.BooleanHelper is
 
     end Is_Expression;
 
+    -----------------
+    -- Is_Variable --
+    -----------------
+
     function Is_Variable (Row : String) return Boolean
     is
     begin
         return not Is_Expression (To_Unbounded_String (Row));
     end Is_Variable;
+
+    ----------------
+    -- Is_Numeric --
+    ----------------
 
     function Is_Numeric (Row : String) return Boolean
     is

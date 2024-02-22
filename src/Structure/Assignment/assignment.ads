@@ -13,7 +13,7 @@ package Assignment is
     type Expression;
     type Any_Expression is access Expression;
 
-    type Expression (Form : ExpressionPrefix) is new VarObject with record
+    type Expression (Form : ExpressionPrefix) is record
 
         case Form is
             when VARIABLE_FORM   => Var : VariableObject := New_Variable

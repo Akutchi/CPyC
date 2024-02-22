@@ -9,9 +9,13 @@ package Types.Prefix is
         -- VAR_USAGE_PREFIX         [Name] = {Value};
 
         NULL_PREFIX,
+        CLOSE_BRACKET_PREFIX,
+        ASSIGNMENT_PREFIX,
+        EXPRESSION_PREFIX,
         VAR_DECLARATION_PREFIX,
         VAR_ASSIGNED_PREFIX,
         VAR_USAGE_PREFIX,
+        FUNCTION_PREFIX,
         IF_PREFIX,
         ELIF_PREFIX,
         ELSE_PREFIX,
@@ -31,7 +35,8 @@ package Types.Prefix is
         INT,
         FLOAT,
         DOUBLE,
-        CHAR
+        CHAR,
+        VOID
     );
 
     type GType is tagged private;

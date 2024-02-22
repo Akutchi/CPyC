@@ -1,6 +1,4 @@
 with Ada.Strings;           use Ada.Strings;
-with Ada.Strings.Fixed;     use Ada.Strings.Fixed;
-with Ada.Strings.Maps;      use Ada.Strings.Maps;
 with Ada.Text_IO;           use Ada.Text_IO;
 
 with Operations;        use Operations;
@@ -10,49 +8,6 @@ with Parser.StringHelper;   use Parser.StringHelper;
 with Parser.Expressions;    use Parser.Expressions;
 
 package body Parser is
-
-    ----------------
-    -- Split_Line --
-    ----------------
-
-    function Split_Line (Row : String) return String_Array
-    is
-
-        P : String := " ";
-        Cnt : Integer := Ada.Strings.Fixed.Count (Source  => Row, Pattern => P);
-
-        Array_Index : Natural := 1;
-        Splited_Line : String_Array (1 .. Cnt+1);
-
-        whitespace : constant Character_Set := To_Set (' ');
-        F : Positive;
-        L : Natural;
-        I : Natural := 1;
-
-    begin
-
-        while I in Row'Range loop
-
-            Find_Token
-            (Source => Row,
-            Set    => whitespace,
-            From => I,
-            Test   => Outside,
-            First  => F,
-            Last   => L);
-
-            Splited_Line (Array_Index) := To_Unbounded_String (Row (F .. L));
-
-            exit when L = 0;
-
-            I := L + 1;
-            Array_Index := Array_Index + 1;
-
-        end loop;
-
-        return Splited_Line;
-
-    end Split_Line;
 
     ---------------------
     -- Create_Variable --
@@ -143,29 +98,42 @@ package body Parser is
 
     function Parse_Line (Row : String) return RowInformation
     is
-        Splited_Line : String_Array := Split_Line (Row);
+        Splited_Line : String_Array := Split_Line (Row, " ");
 
         Is_Typped : Boolean :=
-            New_GType (CHAR, New_GType (INT, Splited_Line (1))).Get_State;
+            New_GType
+                (CHAR, New_GType
+                        (INT, Splited_Line (Splited_Line'First))).Get_State;
 
         Current_Row : RowInformation := (Splited_Line'Last, Splited_Line,
                                         NULL_PREFIX);
 
     begin
 
-        if Is_Typped then
+        if Splited_Line'Length > 1 then
 
-            if Has_Affectation (Splited_Line)
-            and Is_Not_Structure (Splited_Line) then
+            if Is_Typped then
 
-                Current_Row.Prefix := VAR_ASSIGNED_PREFIX;
-            else
+                if Has_Affectation (Splited_Line) then
 
-                Current_Row.Prefix := VAR_DECLARATION_PREFIX;
+                    Current_Row.Prefix := VAR_ASSIGNED_PREFIX;
+                else
+
+                    if Is_Not_Structure (Splited_Line) then
+
+                        Current_Row.Prefix := VAR_DECLARATION_PREFIX;
+
+                    else
+                        Current_Row.Prefix := FUNCTION_PREFIX;
+
+                    end if;
+                end if;
             end if;
 
-        else
-                Current_Row.Prefix := VAR_USAGE_PREFIX;
+        elsif To_String (Splited_Line (Splited_Line'First)) = "}" then
+
+            Current_Row.Prefix := CLOSE_BRACKET_PREFIX;
+
         end if;
 
         return Current_Row;
@@ -190,12 +158,15 @@ package body Parser is
                         (Axiom          => INT,
                          Left_Member    => New_Variable (Var_Name => ""),
                          Right_Member   => Var_Expr);
+
+        New_Var : IntImplAssignment.Any_Assignment := new IntAssignment.ConcreteAssignment;
+
     begin
 
         case Current_Row.Prefix is
 
             when VAR_DECLARATION_PREFIX =>
-                return Create_Variable (Splited_Row);
+                New_Var := Create_Variable (Splited_Row);
 
             when VAR_ASSIGNED_PREFIX | VAR_USAGE_PREFIX =>
 
@@ -216,15 +187,18 @@ package body Parser is
 
                     begin
 
-                        return Create_Int_Expression (Var_Name, SubRow);
+                        New_Var := Create_Int_Expression (Var_Name, SubRow);
                     end;
                 end if;
 
-                return Create_Assigned_Variable (Current_Row.Prefix, Splited_Row);
+                New_Var :=
+                    Create_Assigned_Variable (Current_Row.Prefix, Splited_Row);
 
             when others =>
                 return IntImplAssignment.Any_Assignment (Null_Var);
         end case;
+
+        return New_Var;
 
     end Generate_Int_Variable;
 

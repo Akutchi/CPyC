@@ -1,5 +1,6 @@
 with Ada.Text_IO; use Ada.Text_IO;
 
+with Root;              use Root;
 with Objects.VarObject; use Objects.VarObject;
 with Operations;        use Operations;
 with Types.Prefix;      use Types.Prefix;
@@ -12,6 +13,8 @@ with Assignment.Concrete;
 package Printer is
 
     function Decide_Inverse_Operator (Op : BinaryOp) return String;
+
+    procedure Print (F : File_Type; Object : Any_Object);
 
     procedure Print (F : File_Type; Exp : IntImplAssignment.Any_Assignment);
 

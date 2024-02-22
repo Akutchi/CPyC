@@ -1,17 +1,10 @@
 with Ada.Text_IO;           use Ada.Text_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
-with Objects;                       use Objects;
-with Objects.VarObject;             use Objects.VarObject;
-with Operations;                    use Operations;
-with Types.Prefix;                  use Types.Prefix;
+with Root;              use Root;
 
 with FileHandler;       use FileHandler;
-with Parser;            use Parser;
 with Printer;           use Printer;
-
-with Assignment;
-with Assignment.Concrete;
 
 procedure main is
 
@@ -28,20 +21,15 @@ begin
     while not End_Of_File (Source_Object) loop
 
         declare
-            Row : constant String := Get_Line (Source_Object);
-            Raw_Data : RowInformation := Parse_Line (Row);
-            Representation : IntImplAssignment.Any_Assignment :=
-                Generate_Int_Variable (Raw_Data);
+
+            Root_Object : Any_Object := Decide_On_Parsing (Source_Object);
+
         begin
-
-            Print (Dest_Object, Representation);
+            Print (Dest_Object, Root_Object);
         end;
-
     end loop;
 
     Close (Source_Object);
     Close (Dest_Object);
-
-
 
 end main;

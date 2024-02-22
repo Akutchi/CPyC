@@ -1,3 +1,4 @@
+with Ada.Text_IO;           use Ada.Text_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with Objects.VarObject; use Objects.VarObject;
@@ -32,8 +33,6 @@ package Parser is
     return IntImplAssignment.Any_Assignment;
 
 private
-
-    function Split_Line (Row : String) return String_Array;
 
     function Create_Assigned_Variable
     (Current_Case : StructurePrefix; Splited_Row : String_Array)
