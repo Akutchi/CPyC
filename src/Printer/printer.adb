@@ -36,6 +36,11 @@ package body Printer is
         Suffix : String (1 .. 2);
     begin
 
+        if LAST_ARG = 0 then
+
+            return "():";
+        end if;
+
         Append (Arg_Str, "(");
         for I in 1 .. LAST_ARG loop
 

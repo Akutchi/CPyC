@@ -42,6 +42,9 @@ begin
         Print (Dest_Object, Main_Level.Element (I), MAIN_INDENT);
     end loop;
 
+    Put_Line (Dest_Object, " ");
+    Put_Line (Dest_Object, "main()");
+
     Close (Source_Object);
     Close (Dest_Object);
 

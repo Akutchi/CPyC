@@ -71,28 +71,31 @@ package body Root is
 
         end loop;
 
-        declare
+        if Length (Arg_Str) /= 0 then
 
-            Arg_Split : String_Array := Split_Line (To_String (Arg_Str), ",");
+            declare
 
-        begin
-            for I in Arg_Split'Range loop
+                Arg_Split : String_Array := Split_Line (To_String (Arg_Str), ",");
 
-                declare
-                    Arg_Single_List : String_Array := Split_Line (To_String (Arg_Split (I)), " ");
-                    Arg_Name : String := To_String (Arg_Single_List (2));
-                    Exp : IntImplAssignment.Any_Expression :=
-                        new IntImplAssignment.Expression (VARIABLE_FORM);
-                    Obj : Any_Object := new RootObject (EXPRESSION_PREFIX);
+            begin
+                for I in Arg_Split'Range loop
 
-                begin
-                    Exp.Var := New_Variable (Var_Name => Arg_Name);
-                    Obj.Exp := Exp;
-                    Args.Append (Obj);
-                end;
+                    declare
+                        Arg_Single_List : String_Array := Split_Line (To_String (Arg_Split (I)), " ");
+                        Arg_Name : String := To_String (Arg_Single_List (2));
+                        Exp : IntImplAssignment.Any_Expression :=
+                            new IntImplAssignment.Expression (VARIABLE_FORM);
+                        Obj : Any_Object := new RootObject (EXPRESSION_PREFIX);
 
-            end loop;
-        end;
+                    begin
+                        Exp.Var := New_Variable (Var_Name => Arg_Name);
+                        Obj.Exp := Exp;
+                        Args.Append (Obj);
+                    end;
+
+                end loop;
+            end;
+        end if;
 
         return Args;
 
