@@ -44,6 +44,7 @@ package Root is
                 Axiomatic_Type  : NaturalType;
                 Func_Name       : Unbounded_String;
                 Args            : ObjectList.Vector;
+                Has_Return      : Boolean := False;
                 Return_Stmt     : Any_Object;
 
             when IF_PREFIX | ELIF_PREFIX | FOR_PREFIX =>

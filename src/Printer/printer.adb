@@ -137,7 +137,7 @@ package body Printer is
 
             for I in 1 .. Object.Last_Index loop
 
-                Print (F, Object.Element (I), Level+1);
+                Print (F, Object.Element (I), Level);
             end loop;
 
         end if;
@@ -147,7 +147,10 @@ package body Printer is
 
     procedure Print (F : File_Type; Object : Any_Object; Level : Integer)
     is
+        NEW_TAB : Integer := Level + 2;
+
         INDENT : String := Level * " ";
+        INDENT_RET : String := NEW_TAB * " ";
     begin
 
         case Object.Form is
@@ -162,8 +165,14 @@ package body Printer is
 
                     Put_Line (F, Function_Str);
                     Put_Line (F, " ");
-                    Print (F, Object.Body_Stmt, Level+1);
+                    Print (F, Object.Body_Stmt, NEW_TAB);
                     Put_Line (F, " ");
+
+                    if Object.Has_Return then
+                        Put_Line (F, INDENT_RET & "return " &
+                                     Print (Object.Return_Stmt.Assign.Right));
+                        Put_Line (F, " ");
+                    end if;
 
                 end;
 

@@ -128,6 +128,9 @@ package body Parser is
 
                     end if;
                 end if;
+
+            elsif Splited_Line (Splited_Line'First) = "return" then
+                Current_Row.Prefix := RETURN_PREFIX;
             end if;
 
         elsif To_String (Splited_Line (Splited_Line'First)) = "}" then
@@ -191,6 +194,16 @@ package body Parser is
                     return Create_Assigned_Variable
                         (Current_Row.Prefix, Splited_Row);
                 end if;
+
+            when RETURN_PREFIX =>
+
+                if Is_Expression (Splited_Row) then
+                    return Create_Int_Expression ("return", To_String (Splited_Row (2)));
+
+                else
+                    return Create_Variable (Splited_Row);
+                end if;
+
 
             when others =>
                 return IntImplAssignment.Any_Assignment (Null_Var);

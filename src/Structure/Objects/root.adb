@@ -124,7 +124,6 @@ package body Root is
 
         end loop;
 
-
         return Funct_Body;
 
     end Get_Body;
@@ -144,6 +143,20 @@ package body Root is
         New_Function.Func_Name := Get_Function_Name (Raw_Data);
         New_Function.Args := Get_Arguments (Row);
         New_Function.Body_Stmt := Get_Body (Source);
+
+        declare
+            Is_Return : Any_Object :=
+                New_Function.Body_Stmt.Element (New_Function.Body_Stmt.Last_Index);
+        begin
+
+            if Is_Return.Form = ASSIGNMENT_PREFIX and
+            Is_Return.Assign.Left.Var_Name = "return" then
+
+                New_Function.Return_Stmt := Is_Return;
+                New_Function.Body_Stmt.Delete_Last;
+                New_Function.Has_Return := True;
+            end if;
+        end;
 
         return New_Function;
 
@@ -181,7 +194,7 @@ package body Root is
             case Raw_Data.Prefix is
 
                 when VAR_ASSIGNED_PREFIX | VAR_DECLARATION_PREFIX |
-                VAR_USAGE_PREFIX =>
+                VAR_USAGE_PREFIX | RETURN_PREFIX =>
 
                     Representation := new RootObject (ASSIGNMENT_PREFIX);
                     Representation.Assign := Generate_Int_Variable (Raw_Data);

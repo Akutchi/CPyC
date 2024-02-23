@@ -3,6 +3,8 @@ def f(a):
   i =  0
   j =  3
  
+  return (i)+(j)
+ 
 def main():
  
   var1 =  1
