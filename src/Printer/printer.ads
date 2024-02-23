@@ -12,11 +12,22 @@ with Assignment.Concrete;
 
 package Printer is
 
+    function Print (Exp : IntImplAssignment.Any_Expression) return String;
+
+    procedure Print (F : File_Type; Exp : IntImplAssignment.Any_Assignment;
+                     Level : Integer);
+
+    procedure Print (F : File_Type; Object : ObjectList.Vector; Level : Integer);
+
+    procedure Print (F : File_Type; Object : Any_Object; Level : Integer);
+
+private
+
     function Decide_Inverse_Operator (Op : BinaryOp) return String;
 
-    procedure Print (F : File_Type; Object : Any_Object);
+    function Build_Function_Arg (Args : ObjectList.Vector) return String;
 
-    procedure Print (F : File_Type; Exp : IntImplAssignment.Any_Assignment);
+    function Get_Function_Def (Object : in Any_Object; Indent : String)
+    return String;
 
-    function Print (Exp : IntImplAssignment.Any_Expression) return String;
 end Printer;

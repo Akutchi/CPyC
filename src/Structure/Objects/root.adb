@@ -159,6 +159,8 @@ package body Root is
 
     begin
 
+        Put_Line (Row);
+
         Trim (Row, whitespace, whitespace);
 
         declare
@@ -179,27 +181,20 @@ package body Root is
                 VAR_USAGE_PREFIX =>
 
                     Representation := new RootObject (ASSIGNMENT_PREFIX);
-
-                    declare
-                        Tmp : IntImplAssignment.Any_Assignment := Generate_Int_Variable (Raw_Data);
-                    begin
-
-                        Representation.Assign := Tmp;
-                    end;
+                    Representation.Assign := Generate_Int_Variable (Raw_Data);
+                    return Representation;
 
                 when FUNCTION_PREFIX =>
-                    Representation := Generate_Function (Source_Object, Raw_Data);
+                    return Generate_Function (Source_Object, Raw_Data);
 
                 when CLOSE_BRACKET_PREFIX =>
-                    Representation := new RootObject (CLOSE_BRACKET_PREFIX);
+                    return new RootObject (CLOSE_BRACKET_PREFIX);
 
                 when others =>
-                    Representation := new RootObject (NULL_PREFIX);
+                    return new RootObject (NULL_PREFIX);
 
             end case;
         end;
-
-        return Representation;
 
     end Decide_On_Parsing;
 

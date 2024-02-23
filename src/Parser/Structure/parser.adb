@@ -159,14 +159,12 @@ package body Parser is
                          Left_Member    => New_Variable (Var_Name => ""),
                          Right_Member   => Var_Expr);
 
-        New_Var : IntImplAssignment.Any_Assignment := new IntAssignment.ConcreteAssignment;
-
     begin
 
         case Current_Row.Prefix is
 
             when VAR_DECLARATION_PREFIX =>
-                New_Var := Create_Variable (Splited_Row);
+                return Create_Variable (Splited_Row);
 
             when VAR_ASSIGNED_PREFIX | VAR_USAGE_PREFIX =>
 
@@ -186,19 +184,17 @@ package body Parser is
                             Concatenate_Array (Expr_Array);
 
                     begin
-
-                        New_Var := Create_Int_Expression (Var_Name, SubRow);
+                        return Create_Int_Expression (Var_Name, SubRow);
                     end;
-                end if;
 
-                New_Var :=
-                    Create_Assigned_Variable (Current_Row.Prefix, Splited_Row);
+                else
+                    return Create_Assigned_Variable
+                        (Current_Row.Prefix, Splited_Row);
+                end if;
 
             when others =>
                 return IntImplAssignment.Any_Assignment (Null_Var);
         end case;
-
-        return New_Var;
 
     end Generate_Int_Variable;
 

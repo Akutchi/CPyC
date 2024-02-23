@@ -2,6 +2,7 @@ with Ada.Text_IO;           use Ada.Text_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with Root;              use Root;
+with Types.Prefix;      use Types.Prefix;
 
 with FileHandler;       use FileHandler;
 with Printer;           use Printer;
@@ -13,6 +14,10 @@ procedure main is
 
     Source_Object : File_Type;
     Dest_Object   : File_Type;
+
+    MAIN_INDENT : Natural := 0;
+    Main_Level : ObjectList.Vector;
+
 begin
 
     Open_File (Source_Object, Source_File, In_File);
@@ -25,8 +30,16 @@ begin
             Root_Object : Any_Object := Decide_On_Parsing (Source_Object);
 
         begin
-            Print (Dest_Object, Root_Object);
+
+            if Root_Object.Form /= NULL_PREFIX then
+                Main_Level.Append (Root_Object);
+            end if;
         end;
+    end loop;
+
+    for I in 1 .. Main_Level.Last_Index loop
+
+        Print (Dest_Object, Main_Level.Element (I), MAIN_INDENT);
     end loop;
 
     Close (Source_Object);
