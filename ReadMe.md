@@ -25,11 +25,11 @@ parsing; but hey.)
 
 # Changelog
 
-## 18/02/23 :
+## 18/02/24 :
 
 with T&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: int; \
 with Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [0-9]+ \
-with Variable&nbsp;: [\w\d]+
+with Variable&nbsp;: [\w_]+
 
 with E : (T) Variable (= Value);
 
@@ -42,27 +42,27 @@ generation table :
 | int i = 23; | i = 23 |
 | int j;      | j = 0  |
 
-## 20/02/23 :
+## 20/02/24 :
 
 with T&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: int; \
 with Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [0-9]+ \
-with Variable&nbsp;: [\w\d]+ \
+with Variable&nbsp;: [\w_]+ \
 with Op&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [+-*/]
 
 with S : Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Variable | \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S Op S
 
-with E1 : (\<T\>) Variable (= S);
+with E1 : (T) Variable (= S);
 
 The Program can now generate variable structure of the form E1
 
 e.g :
-| ![C code](./doc/C_Variables.png) |
+| ![C code](./doc/C_Variables_20_02_24.png) |
 |:--:|
 | *C code* |
 
-| ![Python code](./doc/Python_Gen.png) |
+| ![Python code](./doc/Python_Gen_20_02_24.png) |
 |:--:|
 | *Python code Generation* |
 
@@ -72,6 +72,54 @@ right now and I am currently hesitating as to what to do about it. Do I leave it
 for the post-processing or do I want to tackle it during the printing process.
 Part of me is slightly curving towards post-proc' as it is "another" task that
 the printer should not worry about.
+
+## 23/02/24 :
+
+with T&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: int; \
+with Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [0-9]+ \
+with Variable&nbsp;: [\w_]+ \
+with Op&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [+-*/]
+
+with S : Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Variable | \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S Op S
+
+with E1 : (\<T\>) Variable (= S); \
+with Ret: return S;
+
+with Prefix&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: T  (I will add "if" etc. later) \
+with Struct_Name : \w+
+
+with Potential_Args : (\w+)? | ((\w+,)+)\w+ \
+with Args&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ( Potential_Args )
+
+with Stmt : E1&nbsp;&nbsp;| \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ret |\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Struct \
+with Body : Stmt*\
+With Struct : Prefix Struct_Name Args { Body }
+
+
+The Program can now generate structure of the form Struct or E1
+
+e.g :
+| ![C code](./doc/C_Code_23_02_24.png) |
+|:--:|
+| *C code* |
+
+| ![Python code](./doc/Python_Gen_23_02_24.png) |
+|:--:|
+| *Python code Generation* |
+
+### Note :
+
+- The note of 20/02 still holds.
+- Moreover, "main()" is automatically generated whether a function of the same name is found. Will need to generate it only if such a function is found.
+- As of now, calls in expressions are not recognized and will crash the parser.
+
+- Error when parsing (i\*j)+(a*b)
+- Cannot parse f(2, 3)
+
 
 # Structure
 

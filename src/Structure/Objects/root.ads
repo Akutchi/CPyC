@@ -4,11 +4,12 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Strings.Fixed;     use Ada.Strings.Fixed;
 with Ada.Strings.Maps;      use Ada.Strings.Maps;
 
-with Objects.VarObject; use Objects.VarObject;
-with Types.Prefix;      use Types.Prefix;
+with Objects.VarObject;     use Objects.VarObject;
+with Types.Prefix;          use Types.Prefix;
+with Types.Constructed;     use Types.Constructed;
 
-with Parser; use Parser;
-with Parser.StringHelper; use Parser.StringHelper;
+with Parser;                use Parser;
+with Parser.StringHelper;   use Parser.StringHelper;
 
 with Exceptions; use Exceptions;
 
@@ -40,12 +41,12 @@ package Root is
             when ASSIGNMENT_PREFIX =>
                 Assign : IntImplAssignment.Any_Assignment;
 
-             when FUNCTION_PREFIX =>
+            when FUNCTION_PREFIX =>
                 Axiomatic_Type  : NaturalType;
                 Func_Name       : Unbounded_String;
                 Args            : ObjectList.Vector;
                 Has_Return      : Boolean := False;
-                Return_Stmt     : Any_Object;
+                Return_Stmt     : Any_Object; -- I think I can make it IntImplAssigment
 
             when IF_PREFIX | ELIF_PREFIX | FOR_PREFIX =>
                 Stmt : Any_Object;
