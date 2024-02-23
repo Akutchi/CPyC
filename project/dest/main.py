@@ -1,13 +1,13 @@
 def f(a):
  
   i =  0
-  j =  3
+  j = i
  
-  return (i)+(j)
+  return (i)*((j)+(a))
  
 def main():
  
-  var1 =  1
+  var1 = (f)&(2))
   k =  2
   k = (((var1)+(2))*(((k)-(2))*(var1)))+(1)
  

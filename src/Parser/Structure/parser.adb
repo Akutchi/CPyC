@@ -51,20 +51,33 @@ package body Parser is
 
     Name : String  := To_String (Splited_Row (Name_Position));
 
-    Var_Value : Integer :=
-        Integer'Value (Remove_Semi_Colon (Splited_Row (Splited_Row'Last)));
+    Var_Value_Str : String :=
+        Remove_Semi_Colon (Splited_Row (Splited_Row'Last));
 
-    Var_Expr : IntImplAssignment.Any_Expression :=
-            new IntImplAssignment.Expression (VALUE_FORM);
+    Var_Expr : IntImplAssignment.Any_Expression;
 
-    New_Var : IntAssignment.Any_ConcreteAssignment :=
-        IntAssignment.New_Assignment (Axiom => INT,
-                                      Left_Member => New_Variable
-                                        (Var_Name => Name),
-                                      Right_Member   => Var_Expr);
+    New_Var : IntAssignment.Any_ConcreteAssignment;
 
     begin
-        Var_Expr.ValueRep := New_IntegerValue (Value => Var_Value);
+
+        if Is_Numeric (Var_Value_Str) then
+            Var_Expr := new IntImplAssignment.Expression (VALUE_FORM);
+            Var_Expr.ValueRep := New_IntegerValue
+                                    (Value => Integer'Value (Var_Value_Str));
+
+        else
+
+            Var_Expr := new IntImplAssignment.Expression (VARIABLE_FORM);
+            Var_Expr.Var := New_Variable (Var_Name => Var_Value_Str);
+
+        end if;
+
+        New_Var := IntAssignment.New_Assignment
+                            (Axiom => INT,
+                                Left_Member => New_Variable
+                                                (Var_Name => Name),
+                                Right_Member   => Var_Expr);
+
         return IntImplAssignment.Any_Assignment(New_Var);
 
     end;

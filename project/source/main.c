@@ -1,15 +1,15 @@
 int f(int a) {
 
     int i = 0;
-    int j = 3;
+    int j = i;
 
-    return i+j;
+    return i*j+a;
 
 }
 
 int main() {
 
-    int var1 = 1;
+    int var1 = f(2);
     int k = 2;
     int k = ((var1+2)*(k-2)*var1)+1;
 
