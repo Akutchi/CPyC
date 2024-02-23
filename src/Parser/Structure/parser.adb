@@ -184,7 +184,8 @@ package body Parser is
 
             when VAR_ASSIGNED_PREFIX | VAR_USAGE_PREFIX =>
 
-                if Is_Expression (Splited_Row) then
+                if (not Is_Function (Splited_Row))
+                    and Is_Expression (Splited_Row) then
 
                     declare
 
@@ -210,13 +211,8 @@ package body Parser is
 
             when RETURN_PREFIX =>
 
-                if Is_Expression (Splited_Row) then
-                    return Create_Int_Expression ("return", To_String (Splited_Row (2)));
-
-                else
-                    return Create_Variable (Splited_Row);
-                end if;
-
+                return Create_Int_Expression
+                        ("return", To_String (Splited_Row (2)));
 
             when others =>
                 return IntImplAssignment.Any_Assignment (Null_Var);

@@ -7,6 +7,8 @@ package Parser.BooleanHelper is
     function Has_Pattern (Row : Unbounded_String; Pattern : String)
     return Boolean;
 
+    function Is_Function (Splited_Row : String_Array) return Boolean;
+
     function Is_Expression (Splited_Row : String_Array) return Boolean;
 
     function Is_Expression (Row : Unbounded_String) return Boolean;

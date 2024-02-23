@@ -1,6 +1,8 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Strings.Fixed;     use Ada.Strings.Fixed;
 
+with Parser.StringHelper; use Parser.StringHelper;
+
 package body Parser.BooleanHelper is
 
     ----------------------
@@ -62,6 +64,36 @@ package body Parser.BooleanHelper is
 
     end Has_Pattern;
 
+    -----------------
+    -- Is_Function --
+    -----------------
+
+    function Is_Function (Splited_Row : String_Array) return Boolean
+    is
+        Cnt : Natural;
+        Idx : Natural := 0;
+
+        Row : Unbounded_String :=
+            To_Unbounded_String (Concatenate_Array (Splited_Row));
+
+        Row_Check : Unbounded_String;
+        Is_Function_Result : Boolean := True;
+    begin
+
+        Cnt := Ada.Strings.Fixed.Count
+            (Source  => To_String (Row), Pattern => "(");
+
+        for I in 1 .. Cnt loop
+            Idx := Index (Source => Row, Pattern => "(", From => Idx + 1);
+
+            Row_Check := To_Unbounded_String (To_String (Row) (Idx-1)'Image);
+            Is_Function_Result := Is_Function_Result and
+            (not Is_Expression (Row_Check));
+        end loop;
+
+        return Is_Function_Result;
+    end;
+
     -------------------
     -- Is_Expression --
     -------------------
@@ -76,19 +108,16 @@ package body Parser.BooleanHelper is
         Mult_Op     : constant String := "*";
         Div_Op      : constant String := "/";
 
-        Row : Unbounded_String;
+        Row : Unbounded_String :=
+            To_Unbounded_String (Concatenate_Array (Splited_Row));
 
     begin
 
-        for I in 1 .. Splited_Row'Length loop
-            Append (Row, Splited_Row (I));
-        end loop;
-
-        return Has_Pattern (Row, Parenthesis) or
-               Has_Pattern (Row, Plus_Op) or
-               Has_Pattern (Row, Minus_Op) or
-               Has_Pattern (Row, Mult_Op) or
-               Has_Pattern (Row, Div_Op);
+        return  Has_Pattern (Row, Parenthesis) or
+                Has_Pattern (Row, Plus_Op) or
+                Has_Pattern (Row, Minus_Op) or
+                Has_Pattern (Row, Mult_Op) or
+                Has_Pattern (Row, Div_Op);
 
     end Is_Expression;
 
