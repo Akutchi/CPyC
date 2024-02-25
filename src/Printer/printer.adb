@@ -101,22 +101,28 @@ package body Printer is
 
                 declare
 
-                    Left  : String := Trim (Print (Exp.Left), whitespace,
-                                        whitespace);
-                    Right : String :=
-                        (if Exp.Op /= NULL_OP then
-                            "(" & Trim (Print (Exp.Right), whitespace,
-                            whitespace) & ")"
+                    Has_Follow : Boolean :=
+                        (if Exp.Op /= NULL_OP then True else False);
 
+                    Left  : String :=
+                        "(" &
+                        Trim (Print (Exp.Left), whitespace, whitespace) &
+                        ")";
+
+                    Right : String :=
+                        (if Has_Follow then
+                            "(" &
+                            Trim (Print (Exp.Right), whitespace, whitespace) &
+                            ")"
                         else "");
 
                     Op    : String :=
-                        (if Exp.Op /= NULL_OP then
-                            Decide_Inverse_Operator (Exp.Op) else "");
+                        (if Has_Follow then Decide_Inverse_Operator (Exp.Op)
+                        else "");
 
                 begin
 
-                    return "(" & Left & ")" & Op & Right;
+                    return Left & Op & Right;
                 end;
         end case;
 
