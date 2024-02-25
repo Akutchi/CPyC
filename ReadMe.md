@@ -114,11 +114,28 @@ e.g :
 ### Note :
 
 - The note of 20/02 still holds.
-- Moreover, "main()" is automatically generated whether a function of the same name is found. Will need to generate it only if such a function is found.
-- As of now, calls in expressions are not recognized and will crash the parser.
+- Moreover, "main()" is automatically generated whether a function of the same name is found. Will need to generate it only if such a function is found. (P.I.)
+- As of now, calls in expressions are not recognized and will crash the parser. (P.II.)
 
-- Error when parsing (i\*j)+(a*b)
-- Cannot parse f(2, 3)
+- Error when parsing (i\*j)+(a*b) (E.I.)
+- Cannot parse f(2, 3) (E.II.)
+
+## 25/02/24
+
+- Parser I. done. the main call is now only generated if a main function exist
+- Error I. fixed. I just didn't check for string termination and in some cases it just worked.
+- Error II.fixed. I was creating variables by taking the last element of the splited row by whitespace. Obviously doesn't work with multiple args.
+
+e.g :
+| ![C code](./doc/C_Code_25_02_24.png) |
+|:--:|
+| *C code* |
+
+| ![Python code](./doc/Python_Gen_25_02_24.png) |
+|:--:|
+| *Python code Generation* |
+
+
 
 
 # Structure

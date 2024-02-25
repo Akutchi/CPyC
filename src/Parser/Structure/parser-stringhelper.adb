@@ -53,10 +53,15 @@ package body Parser.StringHelper is
 
     function Remove_Semi_Colon (Variable : Unbounded_String) return String
     is
-        L : Integer := Length (Variable);
+        whitespace : Character_Set := To_Set (' ');
+
+        Trimmed_Var : Unbounded_String :=
+            Trim (Variable, whitespace, whitespace);
+
+        L : Integer := Length (Trimmed_Var);
     begin
 
-        return To_String (Variable) (1 .. L-1);
+        return To_String (Trimmed_Var) (1 .. L-1);
     end Remove_Semi_Colon;
 
     --------------------------

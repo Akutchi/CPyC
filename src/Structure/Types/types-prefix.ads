@@ -28,7 +28,9 @@ package Types.Prefix is
 
         VARIABLE_FORM,
         VALUE_FORM,
-        EXPRESSION_FORM
+        EXPRESSION_FORM,
+        LEFT_FORM,
+        RIGHT_FORM
     );
 
     type NaturalType is (

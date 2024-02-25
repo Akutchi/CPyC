@@ -18,6 +18,8 @@ procedure main is
     MAIN_INDENT : Natural := 0;
     Main_Level : ObjectList.Vector;
 
+    Prepare_To_Print_Main : Boolean := False;
+
 begin
 
     Open_File (Source_Object, Source_File, In_File);
@@ -39,11 +41,24 @@ begin
 
     for I in 1 .. Main_Level.Last_Index loop
 
-        Print (Dest_Object, Main_Level.Element (I), MAIN_INDENT);
+        declare
+
+            Element : Any_Object := Main_Level.Element (I);
+
+        begin
+
+            if Element.Form = FUNCTION_PREFIX and Element.Func_Name = "main" then
+                Prepare_To_Print_Main := True;
+            end if;
+
+            Print (Dest_Object, Element, MAIN_INDENT);
+        end;
     end loop;
 
-    Put_Line (Dest_Object, " ");
-    Put_Line (Dest_Object, "main()");
+    if Prepare_To_Print_Main then
+        Put_Line (Dest_Object, " ");
+        Put_Line (Dest_Object, "main()");
+    end if;
 
     Close (Source_Object);
     Close (Dest_Object);

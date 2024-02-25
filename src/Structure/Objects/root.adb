@@ -175,8 +175,6 @@ package body Root is
 
     begin
 
-        Put_Line (Row);
-
         Trim (Row, whitespace, whitespace);
 
         declare

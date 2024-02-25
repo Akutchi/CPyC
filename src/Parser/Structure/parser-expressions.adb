@@ -117,12 +117,21 @@ package body Parser.Expressions is
             Left_Expr := Get_All_Before_Next_Op (SubRow);
         end if;
 
-        Op_Str := SubRow (Left_Expr.End_Pos+1);
-        Remainder := To_Unbounded_String (SubRow (Left_Expr.End_Pos+2 .. End_Str));
-
-        Var_Expr.Op := Decide_Operator (Op_Str);
         Var_Expr.Left := Parse_Int_Expression (To_String (Left_Expr.Str));
-        Var_Expr.Right := Parse_Int_Expression (To_String (Remainder));
+
+        if Left_Expr.End_Pos+2 <= End_Str then
+
+            Op_Str := SubRow (Left_Expr.End_Pos+1);
+            Remainder := To_Unbounded_String (SubRow (Left_Expr.End_Pos+2 .. End_Str));
+
+            Var_Expr.Op := Decide_Operator (Op_Str);
+            Var_Expr.Right := Parse_Int_Expression (To_String (Remainder));
+
+        else
+
+            Var_Expr.Op := NULL_OP;
+
+        end if;
 
         return Var_Expr;
 

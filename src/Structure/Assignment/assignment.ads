@@ -23,6 +23,8 @@ package Assignment is
                 Left    : Any_Expression;
                 Right   : Any_Expression;
                 Op      : BinaryOp;
+
+            when others => null;
         end case;
 
     end record;

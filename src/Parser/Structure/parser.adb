@@ -46,13 +46,16 @@ package body Parser is
     return IntImplAssignment.Any_Assignment
     is
 
+    Full_Row : Unbounded_String :=
+        To_Unbounded_String (Concatenate_Array (Splited_Row));
+
     Name_Position : Integer :=
-        (if Current_Case = VAR_ASSIGNED_PREFIX then 2 else 1);
+                    (if Current_Case = VAR_ASSIGNED_PREFIX then 2 else 1);
 
     Name : String  := To_String (Splited_Row (Name_Position));
 
-    Var_Value_Str : String :=
-        Remove_Semi_Colon (Splited_Row (Splited_Row'Last));
+    Equal_Position : Integer :=
+                    (if Current_Case = VAR_ASSIGNED_PREFIX then 3 else 2);
 
     Var_Expr : IntImplAssignment.Any_Expression;
 
@@ -60,23 +63,50 @@ package body Parser is
 
     begin
 
-        if Is_Numeric (Var_Value_Str) then
-            Var_Expr := new IntImplAssignment.Expression (VALUE_FORM);
-            Var_Expr.ValueRep := New_IntegerValue
-                                    (Value => Integer'Value (Var_Value_Str));
+        if Has_Pattern (Full_Row, ",") then
+
+            declare
+
+                Function_Exp : String :=
+                    Remove_Semi_Colon
+                        (To_Unbounded_String
+                            (Concatenate_Array
+                                (Get_Expression_Array
+                                    (Equal_Position, Splited_Row))));
+            begin
+
+                Var_Expr := new IntImplAssignment.Expression (VARIABLE_FORM);
+                Var_Expr.Var := New_Variable (Var_Name => Function_Exp);
+            end;
 
         else
 
-            Var_Expr := new IntImplAssignment.Expression (VARIABLE_FORM);
-            Var_Expr.Var := New_Variable (Var_Name => Var_Value_Str);
+            declare
 
+                Var_Value_Str : String :=
+                    Remove_Semi_Colon (Splited_Row (Splited_Row'Last));
+
+            begin
+
+                if Is_Numeric (Var_Value_Str) then
+                    Var_Expr := new IntImplAssignment.Expression (VALUE_FORM);
+                    Var_Expr.ValueRep := New_IntegerValue
+                                            (Value => Integer'Value
+                                                        (Var_Value_Str));
+
+                else
+
+                    Var_Expr := new IntImplAssignment.Expression (VARIABLE_FORM);
+                    Var_Expr.Var := New_Variable (Var_Name => Var_Value_Str);
+
+                end if;
+            end;
         end if;
 
         New_Var := IntAssignment.New_Assignment
-                            (Axiom => INT,
-                                Left_Member => New_Variable
-                                                (Var_Name => Name),
-                                Right_Member   => Var_Expr);
+                            (Axiom          => INT,
+                             Left_Member    => New_Variable (Var_Name => Name),
+                             Right_Member   => Var_Expr);
 
         return IntImplAssignment.Any_Assignment(New_Var);
 

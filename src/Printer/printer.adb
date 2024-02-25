@@ -103,13 +103,20 @@ package body Printer is
 
                     Left  : String := Trim (Print (Exp.Left), whitespace,
                                         whitespace);
-                    Right : String := Trim (Print (Exp.Right), whitespace,
-                                        whitespace);
-                    Op    : String := Decide_Inverse_Operator (Exp.Op);
+                    Right : String :=
+                        (if Exp.Op /= NULL_OP then
+                            "(" & Trim (Print (Exp.Right), whitespace,
+                            whitespace) & ")"
+
+                        else "");
+
+                    Op    : String :=
+                        (if Exp.Op /= NULL_OP then
+                            Decide_Inverse_Operator (Exp.Op) else "");
 
                 begin
 
-                    return "(" & Left & ")" & Op & "(" & Right & ")";
+                    return "(" & Left & ")" & Op & Right;
                 end;
         end case;
 
@@ -122,10 +129,12 @@ package body Printer is
 
         INDENT : String := Level * " ";
         Right_Assign : String := Print (Exp.Right);
+        whitespace : Character_Set := To_Set (' ');
 
     begin
 
-        Put_Line (F, INDENT & Exp.Left.Var_Name & " = " & Right_Assign);
+        Put_Line (F, INDENT & Exp.Left.Var_Name & " = " &
+            Trim(Right_Assign, whitespace, whitespace));
 
     end Print;
 
@@ -176,7 +185,7 @@ package body Printer is
 
                 end;
 
-            when others => raise ImplementationError with "structure printing";
+            when others => null;
 
         end case;
 
