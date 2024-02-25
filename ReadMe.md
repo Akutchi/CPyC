@@ -21,57 +21,26 @@ that this is something that I code as I think about it mostly. That is to say,
 it is more or less on the fly than anything (well, I do have some notions about
 parsing; but hey.)
 
+# Structure
 
+![Structure of the code](./doc/Structure.png)
 
 # Changelog
 
-## 18/02/24 :
+## 25/02/24 (fixing bugs):
 
-with T&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: int; \
-with Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [0-9]+ \
-with Variable&nbsp;&nbsp;&nbsp;&nbsp;: [\w_]+
-
-with E : (T) Variable (= Value);
-
-The Program can now generate variable structure of the form of E
-
-generation table :
-
-| C           | Python |
-|-------------|--------|
-| int i = 23; | i = 23 |
-| int j;      | j = 0  |
-
-## 20/02/24 :
-
-with T&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: int; \
-with Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [0-9]+ \
-with Variable&nbsp;&nbsp;&nbsp;&nbsp;: [\w_]+ \
-with Op&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [+-*/]
-
-with S :&nbsp;&nbsp;&nbsp;Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Variable | \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S Op S
-
-with E1 : (T) Variable (= S);
-
-The Program can now generate variable structure of the form E1
+- Parser I. done. the main call is now only generated if a main function exist
+- Error I. fixed. I just didn't check for string termination and in some cases it just worked.
+- Error II.fixed. I was creating variables by taking the last element of the splited row by whitespace. Obviously doesn't work with multiple args.
 
 e.g :
-| ![C code](./doc/C_Variables_20_02_24.png) |
+| ![C code](./doc/C_Code_25_02_24.png) |
 |:--:|
 | *C code* |
 
-| ![Python code](./doc/Python_Gen_20_02_24.png) |
+| ![Python code](./doc/Python_Gen_25_02_24.png) |
 |:--:|
 | *Python code Generation* |
-
-### Note :
-I am well aware that variable name and values are enclosed in parenthesis as of
-right now and I am currently hesitating as to what to do about it. Do I leave it
-for the post-processing or do I want to tackle it during the printing process.
-Part of me is slightly curving towards post-proc' as it is "another" task that
-the printer should not worry about.
 
 ## 23/02/24 :
 
@@ -119,25 +88,51 @@ e.g :
 
 - Error when parsing (i\*j)+(a*b) (E.I.)
 - Cannot parse f(2, 3) (E.II.)
+  
+## 20/02/24 :
 
-## 25/02/24
+with T&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: int; \
+with Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [0-9]+ \
+with Variable&nbsp;&nbsp;&nbsp;&nbsp;: [\w_]+ \
+with Op&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [+-*/]
 
-- Parser I. done. the main call is now only generated if a main function exist
-- Error I. fixed. I just didn't check for string termination and in some cases it just worked.
-- Error II.fixed. I was creating variables by taking the last element of the splited row by whitespace. Obviously doesn't work with multiple args.
+with S :&nbsp;&nbsp;&nbsp;Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Variable | \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S Op S
+
+with E1 : (T) Variable (= S);
+
+The Program can now generate variable structure of the form E1
 
 e.g :
-| ![C code](./doc/C_Code_25_02_24.png) |
+| ![C code](./doc/C_Variables_20_02_24.png) |
 |:--:|
 | *C code* |
 
-| ![Python code](./doc/Python_Gen_25_02_24.png) |
+| ![Python code](./doc/Python_Gen_20_02_24.png) |
 |:--:|
 | *Python code Generation* |
 
+### Note :
+I am well aware that variable name and values are enclosed in parenthesis as of
+right now and I am currently hesitating as to what to do about it. Do I leave it
+for the post-processing or do I want to tackle it during the printing process.
+Part of me is slightly curving towards post-proc' as it is "another" task that
+the printer should not worry about.
 
+## 18/02/24 :
 
+with T&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: int; \
+with Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: [0-9]+ \
+with Variable&nbsp;&nbsp;&nbsp;&nbsp;: [\w_]+
 
-# Structure
+with E : (T) Variable (= Value);
 
-![Structure of the code](./doc/Structure.png)
+The Program can now generate variable structure of the form of E
+
+generation table :
+
+| C           | Python |
+|-------------|--------|
+| int i = 23; | i = 23 |
+| int j;      | j = 0  |
